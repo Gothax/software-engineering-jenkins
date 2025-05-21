@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class CalculatorTest {
+    // test calculating
     @Test
     @DisplayName("1+1 test")
     void add() {
