@@ -15,6 +15,7 @@ public class SimpleTest {
         // given
         int a = 1;
         int b = 1;
+
         // when
         int result = a + b;
         // then
