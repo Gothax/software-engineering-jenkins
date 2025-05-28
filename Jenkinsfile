@@ -1,45 +1,27 @@
-pipeline {
+pipeline{
     agent any
-    triggers {
-        // GitHub webhook trigger
-        githubPush()
+    options {
+        skipStagesAfterUnstable()
     }
+
     stages {
-        stage('Checkout') {
-            steps {
-                // Clone from SCM (requires a Jenkinsfile in the repo root)
-                checkout scm
-            }
-        }
         stage('Build') {
-            steps {
-                // Clean and build without running tests
-                sh './gradlew clean build -x test'
+            steps{
+                sh 'make'
             }
         }
         stage('Test') {
-            steps {
-                // Run tests
-                sh './gradlew test'
-            }
-            post {
-                always {
-                    // Publish JUnit test results
-                    junit '**/build/test-results/**/*.xml'
-                }
+            steps{
+                sh 'make check'
+                junit 'reports/**/*.xml'
             }
         }
+//         stage('Deploy') {
+//             steps{
+//                 sh 'make deploy'
+//             }
+//         }
     }
-    post {
-        success {
-            echo '✅ Build and tests succeeded!'
-        }
-        failure {
-            echo '❌ Build or tests failed.'
-        }
-        always {
-            // Archive build artifacts (optional)
-            archiveArtifacts artifacts: '**/build/libs/*.jar', onlyIfSuccessful: true
-        }
-    }
+
+
 }
